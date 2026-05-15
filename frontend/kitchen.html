@@ -80,7 +80,7 @@
 
     async function fetchOrders() {
       try {
-        const res = await fetch('http://localhost:3000/api/orders');
+        const res = await fetch('/api/orders');
         const data = await res.json();
         orders = data.filter(o => o.status === 'pending');
         renderOrders();
@@ -137,7 +137,7 @@
 
     async function markDone(id) {
       try {
-        await fetch(`http://localhost:3000/api/orders/${id}`, {
+        await fetch(`/api/orders/${id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ status: 'done' })
