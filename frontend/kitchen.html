@@ -55,6 +55,9 @@
       </div>
     </div>
     <div class="flex gap-md">
+      <button class="btn btn-secondary" id="soundBtn" onclick="toggleSound()">
+        <i class="fa-solid fa-volume-xmark"></i> Sound Off
+      </button>
       <div class="conn-status online" id="connStatus"><div class="conn-dot"></div> Online</div>
     </div>
   </header>
@@ -71,7 +74,7 @@
   </div>
 
   <!-- Audio for new order -->
-  <audio id="bellSound" src="frontend/image/WhatsApp Audio 2026-05-15 at 14.22.42.mp3.mpeg" preload="auto"></audio>
+  <audio id="bellSound" src="image/notification.mp3" preload="auto"></audio>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -149,9 +152,34 @@
       }
     }
 
-    function triggerAlert(order) {
+    let soundEnabled = false;
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('soundBtn');
       const audio = document.getElementById('bellSound');
-      audio.play().catch(e => console.log('Audio autoplay blocked', e));
+      
+      if (soundEnabled) {
+        btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> Sound On';
+        btn.style.color = 'var(--brand-green)';
+        btn.style.borderColor = 'var(--brand-green)';
+        // Play a short silent sound to unlock audio
+        audio.play().then(() => {
+          audio.pause();
+          audio.currentTime = 0;
+        }).catch(e => console.log('Audio unlock failed', e));
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> Sound Off';
+        btn.style.color = 'white';
+        btn.style.borderColor = 'rgba(255,255,255,0.1)';
+      }
+    }
+
+    function triggerAlert(order) {
+      if (soundEnabled) {
+        const audio = document.getElementById('bellSound');
+        audio.play().catch(e => console.log('Audio play failed', e));
+      }
       
       document.getElementById('alertOrderId').innerText = `Order #${order.orderNumber}`;
       document.getElementById('alertModal').classList.add('show');
