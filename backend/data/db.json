@@ -7,7 +7,7 @@
       "category": "Roti",
       "description": "Roti lembut yang dilapisi lapisan kopi yang krispy, sangat lezat dimakan selagi hangat.",
       "emoji": "☕",
-      "image": ""
+      "image": "/uploads/1778829018452-coffee-buns-640.jpg"
     },
     {
       "id": "menu-002",
@@ -16,7 +16,7 @@
       "category": "Kue",
       "description": "Bolu panggang yang dilapisi oleh parutan keju yang sangat lezat dan mewah.",
       "emoji": "🎂",
-      "image": ""
+      "image": "/uploads/1778829004473-Resep-Bolu-Keju-Panggang.webp"
     },
     {
       "id": "menu-003",
@@ -25,7 +25,7 @@
       "category": "Roti",
       "description": "Roti sosis yang sangat lezat ditambah saus pedas diatasnya dengan cita rasa yang khas.",
       "emoji": "🌭",
-      "image": ""
+      "image": "/uploads/1778828643581-images .jpg"
     },
     {
       "id": "2e5e599b-8c7b-4c19-b6f8-2f8a170100f0",
@@ -35,7 +35,298 @@
       "description": "",
       "emoji": "🍞",
       "image": "/uploads/1778823352070-Roti abon.jpg.jpeg"
+    },
+    {
+      "id": "f996aa23-bb4d-4e74-8fcd-8383a6edff29",
+      "name": "roti ulang tahun",
+      "price": 50000,
+      "category": "Roti",
+      "description": "",
+      "emoji": "🍞",
+      "image": ""
     }
   ],
-  "orders": []
+  "orders": [
+    {
+      "id": "77604ec5-7340-434f-9d8b-969dc6a0ac3a",
+      "orderNumber": 1,
+      "customerName": "Pelanggan",
+      "items": [
+        {
+          "id": "menu-003",
+          "name": "Roti Sosis Lezat",
+          "price": 5000,
+          "category": "Roti",
+          "description": "Roti sosis yang sangat lezat ditambah saus pedas diatasnya dengan cita rasa yang khas.",
+          "emoji": "🌭",
+          "image": "/uploads/1778828643581-images .jpg",
+          "qty": 4
+        }
+      ],
+      "subtotal": 20000,
+      "tax": 0,
+      "total": 20000,
+      "paymentMethod": "QRIS",
+      "amountPaid": 20000,
+      "change": 0,
+      "note": "",
+      "status": "done",
+      "createdAt": "2026-05-15T07:04:59.771Z",
+      "updatedAt": "2026-05-15T07:06:01.492Z"
+    },
+    {
+      "id": "eed8ca58-fc59-4889-8889-698e8101a513",
+      "orderNumber": 2,
+      "customerName": "kahuna",
+      "items": [
+        {
+          "id": "menu-002",
+          "name": "Luxury Baked Cake",
+          "price": 35000,
+          "category": "Kue",
+          "description": "Bolu panggang yang dilapisi oleh parutan keju yang sangat lezat dan mewah.",
+          "emoji": "🎂",
+          "image": "/uploads/1778829004473-Resep-Bolu-Keju-Panggang.webp",
+          "qty": 1
+        },
+        {
+          "id": "menu-003",
+          "name": "Roti Sosis Lezat",
+          "price": 5000,
+          "category": "Roti",
+          "description": "Roti sosis yang sangat lezat ditambah saus pedas diatasnya dengan cita rasa yang khas.",
+          "emoji": "🌭",
+          "image": "/uploads/1778828643581-images .jpg",
+          "qty": 1
+        },
+        {
+          "id": "2e5e599b-8c7b-4c19-b6f8-2f8a170100f0",
+          "name": "Roti Abon Panggang",
+          "price": 5000,
+          "category": "Roti",
+          "description": "",
+          "emoji": "🍞",
+          "image": "/uploads/1778823352070-Roti abon.jpg.jpeg",
+          "qty": 1
+        },
+        {
+          "id": "menu-001",
+          "name": "Signature Coffee Buns",
+          "price": 6000,
+          "category": "Roti",
+          "description": "Roti lembut yang dilapisi lapisan kopi yang krispy, sangat lezat dimakan selagi hangat.",
+          "emoji": "☕",
+          "image": "/uploads/1778829018452-coffee-buns-640.jpg",
+          "qty": 1
+        }
+      ],
+      "subtotal": 51000,
+      "tax": 0,
+      "total": 51000,
+      "paymentMethod": "Cash",
+      "amountPaid": 60000,
+      "change": 9000,
+      "note": "",
+      "status": "done",
+      "createdAt": "2026-05-15T07:11:58.644Z",
+      "updatedAt": "2026-05-15T07:12:05.327Z"
+    },
+    {
+      "id": "8b97ffa8-8de4-49d9-b461-69704f870721",
+      "orderNumber": 3,
+      "customerName": "Pelanggan",
+      "items": [
+        {
+          "id": "menu-002",
+          "name": "Luxury Baked Cake",
+          "price": 35000,
+          "category": "Kue",
+          "description": "Bolu panggang yang dilapisi oleh parutan keju yang sangat lezat dan mewah.",
+          "emoji": "🎂",
+          "image": "/uploads/1778829004473-Resep-Bolu-Keju-Panggang.webp",
+          "qty": 1
+        },
+        {
+          "id": "menu-003",
+          "name": "Roti Sosis Lezat",
+          "price": 5000,
+          "category": "Roti",
+          "description": "Roti sosis yang sangat lezat ditambah saus pedas diatasnya dengan cita rasa yang khas.",
+          "emoji": "🌭",
+          "image": "/uploads/1778828643581-images .jpg",
+          "qty": 1
+        },
+        {
+          "id": "2e5e599b-8c7b-4c19-b6f8-2f8a170100f0",
+          "name": "Roti Abon Panggang",
+          "price": 5000,
+          "category": "Roti",
+          "description": "",
+          "emoji": "🍞",
+          "image": "/uploads/1778823352070-Roti abon.jpg.jpeg",
+          "qty": 1
+        }
+      ],
+      "subtotal": 45000,
+      "tax": 0,
+      "total": 45000,
+      "paymentMethod": "Cash",
+      "amountPaid": 50000,
+      "change": 5000,
+      "note": "",
+      "status": "done",
+      "createdAt": "2026-05-15T07:12:37.271Z",
+      "updatedAt": "2026-05-15T07:13:04.768Z"
+    },
+    {
+      "id": "921f8512-b3a1-4e1d-8ace-b2224089513b",
+      "orderNumber": 4,
+      "customerName": "ayah",
+      "items": [
+        {
+          "id": "f996aa23-bb4d-4e74-8fcd-8383a6edff29",
+          "name": "roti ulang tahun",
+          "price": 50000,
+          "category": "Roti",
+          "description": "",
+          "emoji": "🍞",
+          "image": "",
+          "qty": 1
+        }
+      ],
+      "subtotal": 50000,
+      "tax": 0,
+      "total": 50000,
+      "paymentMethod": "Cash",
+      "amountPaid": 50000,
+      "change": 0,
+      "note": "",
+      "status": "done",
+      "createdAt": "2026-05-15T07:14:41.890Z",
+      "updatedAt": "2026-05-15T07:15:09.208Z"
+    },
+    {
+      "id": "a3e38117-237a-416e-ab53-7c24a0dc19b2",
+      "orderNumber": 5,
+      "customerName": "Pelanggan",
+      "items": [
+        {
+          "id": "menu-001",
+          "name": "Signature Coffee Buns",
+          "price": 6000,
+          "category": "Roti",
+          "description": "Roti lembut yang dilapisi lapisan kopi yang krispy, sangat lezat dimakan selagi hangat.",
+          "emoji": "☕",
+          "image": "/uploads/1778829018452-coffee-buns-640.jpg",
+          "qty": 1
+        },
+        {
+          "id": "menu-002",
+          "name": "Luxury Baked Cake",
+          "price": 35000,
+          "category": "Kue",
+          "description": "Bolu panggang yang dilapisi oleh parutan keju yang sangat lezat dan mewah.",
+          "emoji": "🎂",
+          "image": "/uploads/1778829004473-Resep-Bolu-Keju-Panggang.webp",
+          "qty": 1
+        },
+        {
+          "id": "menu-003",
+          "name": "Roti Sosis Lezat",
+          "price": 5000,
+          "category": "Roti",
+          "description": "Roti sosis yang sangat lezat ditambah saus pedas diatasnya dengan cita rasa yang khas.",
+          "emoji": "🌭",
+          "image": "/uploads/1778828643581-images .jpg",
+          "qty": 1
+        },
+        {
+          "id": "f996aa23-bb4d-4e74-8fcd-8383a6edff29",
+          "name": "roti ulang tahun",
+          "price": 50000,
+          "category": "Roti",
+          "description": "",
+          "emoji": "🍞",
+          "image": "",
+          "qty": 1
+        },
+        {
+          "id": "2e5e599b-8c7b-4c19-b6f8-2f8a170100f0",
+          "name": "Roti Abon Panggang",
+          "price": 5000,
+          "category": "Roti",
+          "description": "",
+          "emoji": "🍞",
+          "image": "/uploads/1778823352070-Roti abon.jpg.jpeg",
+          "qty": 1
+        }
+      ],
+      "subtotal": 101000,
+      "tax": 0,
+      "total": 101000,
+      "paymentMethod": "Cash",
+      "amountPaid": 120000,
+      "change": 19000,
+      "note": "",
+      "status": "done",
+      "createdAt": "2026-05-15T07:17:04.470Z",
+      "updatedAt": "2026-05-15T07:17:15.461Z"
+    },
+    {
+      "id": "6f668f1f-1053-4cd5-b186-59fb13623365",
+      "orderNumber": 6,
+      "customerName": "Kean",
+      "items": [
+        {
+          "id": "menu-001",
+          "name": "Signature Coffee Buns",
+          "price": 6000,
+          "category": "Roti",
+          "description": "Roti lembut yang dilapisi lapisan kopi yang krispy, sangat lezat dimakan selagi hangat.",
+          "emoji": "☕",
+          "image": "/uploads/1778829018452-coffee-buns-640.jpg",
+          "qty": 1
+        },
+        {
+          "id": "menu-002",
+          "name": "Luxury Baked Cake",
+          "price": 35000,
+          "category": "Kue",
+          "description": "Bolu panggang yang dilapisi oleh parutan keju yang sangat lezat dan mewah.",
+          "emoji": "🎂",
+          "image": "/uploads/1778829004473-Resep-Bolu-Keju-Panggang.webp",
+          "qty": 1
+        },
+        {
+          "id": "menu-003",
+          "name": "Roti Sosis Lezat",
+          "price": 5000,
+          "category": "Roti",
+          "description": "Roti sosis yang sangat lezat ditambah saus pedas diatasnya dengan cita rasa yang khas.",
+          "emoji": "🌭",
+          "image": "/uploads/1778828643581-images .jpg",
+          "qty": 1
+        },
+        {
+          "id": "2e5e599b-8c7b-4c19-b6f8-2f8a170100f0",
+          "name": "Roti Abon Panggang",
+          "price": 5000,
+          "category": "Roti",
+          "description": "",
+          "emoji": "🍞",
+          "image": "/uploads/1778823352070-Roti abon.jpg.jpeg",
+          "qty": 1
+        }
+      ],
+      "subtotal": 51000,
+      "tax": 0,
+      "total": 51000,
+      "paymentMethod": "Cash",
+      "amountPaid": 60000,
+      "change": 9000,
+      "note": "",
+      "status": "pending",
+      "createdAt": "2026-05-15T07:18:58.502Z"
+    }
+  ]
 }
