@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mamitha Bakery - POS Cashier</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .pos-container {
+      display: flex;
+      height: calc(100vh - 64px);
+    }
+
+    .main-area {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .sidebar {
+      width: 380px;
+      background: var(--brand-dark2);
+      border-left: 1px solid rgba(255, 255, 255, 0.07);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .menu-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--brand-orange);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .menu-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .menu-img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    .menu-name {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .menu-price {
+      color: var(--brand-orange);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .cart-header {
+      padding: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-name {
+      font-weight: 600;
+      font-size: .95rem;
+    }
+
+    .item-price {
+      color: var(--brand-orange);
+      font-size: .85rem;
+      font-weight: 500;
+    }
+
+    .item-qty-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+
+    .qty-btn {
+      background: none;
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qty-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .cart-summary {
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: .9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.2);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .pay-btn {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      padding: 16px;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="pos-header">
+    <div class="flex">
+      <div class="pos-logo-mark"><i class="fa-solid fa-bread-slice"></i></div>
+      <div>
+        <div class="pos-brand-name">Mamitha Bakery</div>
+        <div class="pos-brand-sub">Cashier System</div>
+      </div>
+    </div>
+    <div class="pos-datetime" id="datetime"><strong>00:00</strong></div>
+    <div class="flex gap-md">
+      <div class="conn-status online" id="connStatus">
+        <div class="conn-dot"></div> Online
+      </div>
+      <a href="kitchen.html" target="_blank" class="header-nav-btn"><i class="fa-solid fa-bell"></i> Kitchen</a>
+      <a href="admin.html" target="_blank" class="header-nav-btn"><i class="fa-solid fa-gear"></i> Admin</a>
+    </div>
+  </header>
+
+  <div class="pos-container">
+    <div class="main-area">
+      <h2 style="margin-bottom: 20px;">Menu Products</h2>
+      <div class="menu-grid" id="menuGrid">
+        <!-- Products load here -->
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="cart-header">
+        <div class="flex" style="justify-content: space-between;">
+          <h3 style="font-size: 1.2rem;">Current Order</h3>
+          <button class="btn btn-secondary" onclick="clearCart()"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        <input type="text" id="customerName" class="form-input" placeholder="Customer Name (Optional)"
+          style="margin-top: 12px;">
+      </div>
+
+      <div class="cart-items" id="cartItems">
+        <!-- Cart items load here -->
+        <div style="text-align: center; color: rgba(255,255,255,0.4); margin-top: 40px;">
+          <i class="fa-solid fa-basket-shopping" style="font-size: 3rem; margin-bottom: 10px;"></i>
+          <p>Cart is empty</p>
+        </div>
+      </div>
+
+      <div class="cart-summary">
+        <div class="summary-row"><span>Subtotal</span> <span id="subtotalLabel">Rp 0</span></div>
+        <div class="summary-row"><span>Tax (0%)</span> <span id="taxLabel">Rp 0</span></div>
+        <div class="summary-total"><span>Total</span> <span id="totalLabel" class="text-orange">Rp 0</span></div>
+        <button class="btn btn-primary btn-full pay-btn" onclick="openPayment()"><i class="fa-solid fa-wallet"></i>
+          Proceed to Pay</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div class="modal-overlay" id="paymentModal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closePayment()"><i class="fa-solid fa-xmark"></i></button>
+      <h2>Payment</h2>
+      <div
+        style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: center;">
+        <div style="font-size: .9rem; color: rgba(255,255,255,0.7);">Total Amount</div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--brand-orange);" id="payTotalLabel">Rp 0</div>
+      </div>
+
+      <div class="form-group">
+        <label>Payment Method</label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <button class="btn btn-secondary flex" style="justify-content:center; padding:16px;" id="btnCash"
+            onclick="setPaymentMethod('Cash')"><i class="fa-solid fa-money-bill"></i> Cash</button>
+          <button class="btn btn-secondary flex" style="justify-content:center; padding:16px;" id="btnQris"
+            onclick="setPaymentMethod('QRIS')"><i class="fa-solid fa-qrcode"></i> QRIS</button>
+        </div>
+      </div>
+
+      <div class="form-group" id="cashAmountGroup">
+        <label>Amount Received (Rp)</label>
+        <input type="number" id="amountPaid" class="form-input" style="font-size: 1.2rem; padding: 12px;"
+          oninput="calcChange()">
+      </div>
+
+      <div class="summary-row" style="font-size: 1.1rem; color: white;" id="changeGroup">
+        <span>Change</span>
+        <span id="changeLabel" class="text-green font-weight-bold">Rp 0</span>
+      </div>
+
+      <div id="qrisContainer" style="display: none; text-align: center; margin-bottom: 20px;">
+        <p style="margin-bottom: 10px; color: rgba(255,255,255,0.7);">Scan to Pay</p>
+        <div style="background: white; padding: 15px; border-radius: 12px; display: inline-block;">
+          <img src="image/qris.jpg" alt="QRIS Code" style="width: 180px; height: 180px;">
+        </div>
+        <p style="margin-top: 10px; font-weight: bold; font-size: 1.1rem; letter-spacing: 2px;">NMID: ID1029384756</p>
+      </div>
+
+      <button class="btn btn-primary btn-full pay-btn" style="margin-top: 20px;" onclick="processOrder()"><i
+          class="fa-solid fa-check"></i> Complete Order</button>
+    </div>
+  </div>
+
+  <!-- Socket.io -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    let menuItems = [];
+    let cart = [];
+    let paymentMethod = 'Cash';
+    const API_URL = 'http://localhost:3000/api';
+
+    // Format currency
+    const formatRp = (num) => 'Rp ' + num.toLocaleString('id-ID');
+
+    // Load Data
+    async function fetchMenu() {
+      try {
+        const res = await fetch(`${API_URL}/menu`);
+        menuItems = await res.json();
+        renderMenu();
+      } catch (e) {
+        console.error('Failed to fetch menu:', e);
+      }
+    }
+
+    // Render Menu Grid
+    function renderMenu() {
+      const grid = document.getElementById('menuGrid');
+      grid.innerHTML = '';
+      menuItems.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'menu-card';
+        div.onclick = () => addToCart(item);
+
+        const media = item.image
+          ? `<img src="${item.image}" class="menu-img" alt="${item.name}">`
+          : `<span class="menu-icon">${item.emoji}</span>`;
+
+        div.innerHTML = `
+          ${media}
+          <div class="menu-name">${item.name}</div>
+          <div class="menu-price">${formatRp(item.price)}</div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    // Cart Functions
+    function addToCart(item) {
+      const existing = cart.find(i => i.id === item.id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...item, qty: 1 });
+      }
+      renderCart();
+    }
+
+    function updateQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (item) {
+        item.qty += delta;
+        if (item.qty <= 0) {
+          cart = cart.filter(i => i.id !== id);
+        }
+        renderCart();
+      }
+    }
+
+    function clearCart() {
+      cart = [];
+      document.getElementById('customerName').value = '';
+      renderCart();
+    }
+
+    function renderCart() {
+      const container = document.getElementById('cartItems');
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; color: rgba(255,255,255,0.4); margin-top: 40px;">
+            <i class="fa-solid fa-basket-shopping" style="font-size: 3rem; margin-bottom: 10px;"></i>
+            <p>Cart is empty</p>
+          </div>
+        `;
+        updateSummary();
+        return;
+      }
+
+      container.innerHTML = '';
+      cart.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <div class="item-info">
+            <div class="item-name">${item.name}</div>
+            <div class="item-price">${formatRp(item.price)}</div>
+          </div>
+          <div class="item-qty-ctrl">
+            <button class="qty-btn" onclick="updateQty('${item.id}', -1)"><i class="fa-solid fa-minus" style="font-size:.7rem"></i></button>
+            <span style="font-weight:600; width:20px; text-align:center;">${item.qty}</span>
+            <button class="qty-btn" onclick="updateQty('${item.id}', 1)"><i class="fa-solid fa-plus" style="font-size:.7rem"></i></button>
+          </div>
+          <div style="font-weight:700; width:80px; text-align:right;">${formatRp(item.price * item.qty)}</div>
+        `;
+        container.appendChild(div);
+      });
+      updateSummary();
+    }
+
+    function getTotals() {
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const tax = 0; // Set to 0 as per user default, can be modified
+      const total = subtotal + tax;
+      return { subtotal, tax, total };
+    }
+
+    function updateSummary() {
+      const { subtotal, tax, total } = getTotals();
+      document.getElementById('subtotalLabel').innerText = formatRp(subtotal);
+      document.getElementById('taxLabel').innerText = formatRp(tax);
+      document.getElementById('totalLabel').innerText = formatRp(total);
+    }
+
+    // Payment Flow
+    function openPayment() {
+      if (cart.length === 0) return alert('Cart is empty!');
+      const { total } = getTotals();
+      document.getElementById('payTotalLabel').innerText = formatRp(total);
+      document.getElementById('amountPaid').value = '';
+      document.getElementById('changeLabel').innerText = 'Rp 0';
+      setPaymentMethod('Cash');
+      document.getElementById('paymentModal').classList.add('active');
+    }
+
+    function closePayment() {
+      document.getElementById('paymentModal').classList.remove('active');
+    }
+
+    function setPaymentMethod(method) {
+      paymentMethod = method;
+      document.getElementById('btnCash').style.borderColor = method === 'Cash' ? 'var(--brand-orange)' : 'rgba(255,255,255,0.1)';
+      document.getElementById('btnCash').style.color = method === 'Cash' ? 'var(--brand-orange)' : 'var(--brand-cream)';
+
+      document.getElementById('btnQris').style.borderColor = method === 'QRIS' ? 'var(--brand-orange)' : 'rgba(255,255,255,0.1)';
+      document.getElementById('btnQris').style.color = method === 'QRIS' ? 'var(--brand-orange)' : 'var(--brand-cream)';
+
+      const cashGroup = document.getElementById('cashAmountGroup');
+      const changeGroup = document.getElementById('changeGroup');
+      const qrisContainer = document.getElementById('qrisContainer');
+
+      if (method === 'QRIS') {
+        cashGroup.style.display = 'none';
+        changeGroup.style.display = 'none';
+        qrisContainer.style.display = 'block';
+      } else {
+        cashGroup.style.display = 'block';
+        changeGroup.style.display = 'flex';
+        qrisContainer.style.display = 'none';
+      }
+    }
+
+    function calcChange() {
+      const { total } = getTotals();
+      const paid = parseInt(document.getElementById('amountPaid').value) || 0;
+      const change = paid - total;
+      document.getElementById('changeLabel').innerText = change >= 0 ? formatRp(change) : 'Rp 0';
+      document.getElementById('changeLabel').style.color = change >= 0 ? 'var(--brand-green)' : 'var(--brand-red)';
+    }
+
+    async function processOrder() {
+      const { subtotal, tax, total } = getTotals();
+      const customerName = document.getElementById('customerName').value || 'Pelanggan';
+      const paid = parseInt(document.getElementById('amountPaid').value) || total; // Default to exact total if empty
+
+      if (paymentMethod === 'Cash' && paid < total) {
+        return alert('Amount received is less than total!');
+      }
+
+      const orderData = {
+        customerName,
+        items: cart,
+        subtotal,
+        tax,
+        total,
+        paymentMethod,
+        amountPaid: paid,
+        change: paymentMethod === 'Cash' ? (paid - total) : 0
+      };
+
+      try {
+        const res = await fetch(`${API_URL}/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderData)
+        });
+
+        if (res.ok) {
+          alert('Order placed successfully!');
+          closePayment();
+          clearCart();
+        }
+      } catch (e) {
+        console.error('Order error:', e);
+        alert('Failed to place order.');
+      }
+    }
+
+    // Init
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById('datetime').innerHTML = `<strong>${now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</strong>${now.toLocaleDateString('en-GB')}`;
+    }, 1000);
+
+    // Socket listeners
+    socket.on('connect', () => {
+      document.getElementById('connStatus').className = 'conn-status online';
+      document.getElementById('connStatus').innerHTML = '<div class="conn-dot"></div> Online';
+    });
+    socket.on('disconnect', () => {
+      document.getElementById('connStatus').className = 'conn-status offline';
+      document.getElementById('connStatus').innerHTML = '<div class="conn-dot"></div> Offline';
+    });
+    socket.on('menu_updated', (newMenu) => {
+      menuItems = newMenu;
+      renderMenu();
+    });
+
+    fetchMenu();
+  </script>
+</body>
+
+</html>

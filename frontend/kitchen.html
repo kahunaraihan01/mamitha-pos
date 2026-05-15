@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mamitha Bakery - Kitchen Display</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    body { background: var(--brand-dark3); }
+    .kitchen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px; padding: 24px; }
+    
+    .order-card { 
+      background: var(--brand-dark2); 
+      border-radius: 16px; 
+      border: 1px solid rgba(255,255,255,0.05);
+      box-shadow: var(--shadow-sm);
+      display: flex; flex-direction: column;
+      animation: slideUp 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .order-card.new { animation: pulse 1s infinite alternate; border-color: var(--brand-orange); }
+    
+    .order-header { padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); }
+    .order-id { font-size: 1.2rem; font-weight: 700; color: var(--brand-orange); }
+    .order-time { font-size: .85rem; color: rgba(255,255,255,0.5); }
+    
+    .order-customer { padding: 12px 16px; background: rgba(255,255,255,0.02); font-weight: 600; border-bottom: 1px dashed rgba(255,255,255,0.05); }
+    
+    .order-items { padding: 16px; flex: 1; overflow-y: auto; }
+    .o-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 1.1rem; }
+    .o-qty { background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 6px; font-weight: 700; color: var(--brand-orange); margin-right: 12px; }
+    
+    .order-footer { padding: 16px; border-top: 1px solid rgba(255,255,255,0.05); }
+    
+    /* Notification Modal */
+    #alertModal {
+      position: fixed; inset: 0; background: rgba(216,67,21,0.9); z-index: 10000;
+      display: none; align-items: center; justify-content: center; flex-direction: column;
+      color: white; text-align: center;
+    }
+    #alertModal.show { display: flex; animation: fadeIn 0.2s; }
+    .alert-icon { font-size: 6rem; margin-bottom: 20px; animation: bounce 1s infinite; }
+  </style>
+</head>
+<body>
+
+  <header class="pos-header">
+    <div class="flex">
+      <div class="pos-logo-mark"><i class="fa-solid fa-fire-burner"></i></div>
+      <div>
+        <div class="pos-brand-name">Kitchen Display</div>
+        <div class="pos-brand-sub">Mamitha Bakery</div>
+      </div>
+    </div>
+    <div class="flex gap-md">
+      <div class="conn-status online" id="connStatus"><div class="conn-dot"></div> Online</div>
+    </div>
+  </header>
+
+  <div class="kitchen-grid" id="ordersGrid">
+    <!-- Orders will appear here -->
+  </div>
+
+  <div id="alertModal">
+    <i class="fa-solid fa-bell alert-icon"></i>
+    <h1 style="font-size: 4rem; margin-bottom: 10px;">New Order!</h1>
+    <p style="font-size: 1.5rem;" id="alertOrderId">Order #000</p>
+    <button class="btn btn-secondary" style="margin-top:30px; font-size:1.2rem; padding: 12px 30px; background:white; color:var(--brand-orange);" onclick="closeAlert()">Acknowledge</button>
+  </div>
+
+  <!-- Audio for new order -->
+  <audio id="bellSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    let orders = [];
+
+    async function fetchOrders() {
+      try {
+        const res = await fetch('http://localhost:3000/api/orders');
+        const data = await res.json();
+        orders = data.filter(o => o.status === 'pending');
+        renderOrders();
+      } catch (e) {
+        console.error('Failed to fetch orders:', e);
+      }
+    }
+
+    function renderOrders() {
+      const grid = document.getElementById('ordersGrid');
+      if (orders.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 50px; color: rgba(255,255,255,0.3);">
+            <i class="fa-solid fa-mug-hot" style="font-size: 4rem; margin-bottom: 20px;"></i>
+            <h2>No pending orders</h2>
+            <p>Waiting for new orders from cashier...</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = '';
+      orders.forEach(order => {
+        const time = new Date(order.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        const div = document.createElement('div');
+        div.className = 'order-card';
+        div.id = `order-${order.id}`;
+        
+        let itemsHtml = order.items.map(item => `
+          <div class="o-item">
+            <div><span class="o-qty">${item.qty}x</span> ${item.name}</div>
+          </div>
+        `).join('');
+
+        div.innerHTML = `
+          <div class="order-header">
+            <div class="order-id">#${order.orderNumber}</div>
+            <div class="order-time"><i class="fa-regular fa-clock"></i> ${time}</div>
+          </div>
+          <div class="order-customer"><i class="fa-solid fa-user" style="margin-right:8px; color:var(--brand-orange)"></i> ${order.customerName}</div>
+          <div class="order-items">
+            ${itemsHtml}
+            ${order.note ? `<div style="margin-top:15px; padding:10px; background:rgba(249,168,37,0.1); border-left:3px solid var(--brand-gold); color:var(--brand-gold); font-size:.9rem;"><i class="fa-solid fa-note-sticky"></i> ${order.note}</div>` : ''}
+          </div>
+          <div class="order-footer">
+            <button class="btn btn-success btn-full" style="padding:12px; font-size:1.1rem;" onclick="markDone('${order.id}')">
+              <i class="fa-solid fa-check-double"></i> Mark Done
+            </button>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    async function markDone(id) {
+      try {
+        await fetch(`http://localhost:3000/api/orders/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'done' })
+        });
+        orders = orders.filter(o => o.id !== id);
+        renderOrders();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function triggerAlert(order) {
+      const audio = document.getElementById('bellSound');
+      audio.play().catch(e => console.log('Audio autoplay blocked', e));
+      
+      document.getElementById('alertOrderId').innerText = `Order #${order.orderNumber}`;
+      document.getElementById('alertModal').classList.add('show');
+    }
+
+    function closeAlert() {
+      document.getElementById('alertModal').classList.remove('show');
+    }
+
+    // WebSockets
+    socket.on('connect', () => {
+      document.getElementById('connStatus').className = 'conn-status online';
+      document.getElementById('connStatus').innerHTML = '<div class="conn-dot"></div> Online';
+    });
+    socket.on('disconnect', () => {
+      document.getElementById('connStatus').className = 'conn-status offline';
+      document.getElementById('connStatus').innerHTML = '<div class="conn-dot"></div> Offline';
+    });
+    
+    socket.on('new_order', (order) => {
+      orders.push(order);
+      renderOrders();
+      triggerAlert(order);
+    });
+
+    fetchOrders();
+  </script>
+</body>
+</html>
